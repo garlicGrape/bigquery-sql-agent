@@ -73,14 +73,25 @@ async def demo():
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BigQuery SQL Agent — Demo</title>
+  <style>
+    body { margin: 0; min-height: 100vh; background: #f8fafc; font-family: system-ui, sans-serif; display: flex; align-items: flex-start; justify-content: center; padding: 40px 16px; box-sizing: border-box; }
+    #widget-wrap { width: 100%; max-width: 680px; }
+    #status { padding: 12px; font-size: 13px; color: #718096; }
+  </style>
 </head>
-<body style="margin:0;background:#f8fafc;font-family:sans-serif;">
-  <div id="bq-agent-widget" data-api-url=""></div>
+<body>
+  <div id="widget-wrap">
+    <div id="status">Loading widget…</div>
+    <div id="bq-agent-widget"></div>
+  </div>
   <script>
-    // Point the widget at this same origin so it works on any deployment
-    document.getElementById('bq-agent-widget').dataset.apiUrl = window.location.origin;
+    var origin = window.location.origin;
+    document.getElementById('bq-agent-widget').dataset.apiUrl = origin;
   </script>
-  <script src="/dist/bq-sql-agent.iife.js"></script>
+  <script src="/dist/bq-sql-agent.iife.js"
+    onload="document.getElementById('status').style.display='none'"
+    onerror="document.getElementById('status').textContent='Error: could not load widget JS from /dist/bq-sql-agent.iife.js'">
+  </script>
 </body>
 </html>"""
 
