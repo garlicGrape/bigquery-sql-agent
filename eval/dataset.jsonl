@@ -1,0 +1,7 @@
+{"question": "Which Citibike stations had the most trips starting from them in July 2018?", "expected_contains": ["start_station_name", "COUNT", "2018", "7"], "description": "Top stations by outbound trip volume for a specific month"}
+{"question": "What is the average trip duration in minutes for subscribers vs customers?", "expected_contains": ["usertype", "AVG", "tripduration", "60"], "description": "Aggregate duration grouped by user type"}
+{"question": "What are the top 10 most popular routes?", "expected_contains": ["start_station_name", "end_station_name", "COUNT", "LIMIT 10"], "description": "Top origin-destination pairs"}
+{"question": "How many trips were taken each month in 2017?", "expected_contains": ["EXTRACT", "MONTH", "2017", "COUNT"], "description": "Monthly trip counts for a specific year"}
+{"question": "Which bike ID has been used the most?", "expected_contains": ["bikeid", "COUNT", "ORDER BY"], "description": "Most-used individual bike"}
+{"question": "What percentage of trips are taken by subscribers?", "expected_contains": ["usertype", "COUNT"], "description": "Subscriber vs customer share"}
+{"question": "What is the busiest hour of day for Citibike trips?", "expected_contains": ["EXTRACT", "HOUR", "COUNT"], "description": "Trip volume by hour of day"}

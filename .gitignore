@@ -1,0 +1,11 @@
+.env
+*.json
+!pyproject.toml
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+dist/
+*.egg-info/
+.DS_Store
+*.log
