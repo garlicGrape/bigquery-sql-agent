@@ -11,7 +11,7 @@ _BLOCKED = (
     exp.Delete,
     exp.Drop,
     exp.Create,
-    exp.AlterTable,
+    exp.Alter,
     exp.Merge,
     exp.Command,
     exp.Transaction,

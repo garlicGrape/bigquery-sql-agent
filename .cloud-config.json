@@ -1,0 +1,7 @@
+{
+  "provider": "gcp",
+  "project_id": "msbai-dwd-sk7374",
+  "service_account": "bq-sql-agent@msbai-dwd-sk7374.iam.gserviceaccount.com",
+  "roles": ["roles/bigquery.jobUser"],
+  "created_at": "2026-06-17T02:34:38Z"
+}

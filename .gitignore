@@ -1,6 +1,9 @@
 .env
 *.json
 !pyproject.toml
+!.cloud-config.json
+credentials.json
+credentials_clean.json
 .venv/
 __pycache__/
 *.py[cod]
