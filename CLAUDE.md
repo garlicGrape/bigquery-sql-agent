@@ -91,3 +91,18 @@ Every change to prompts, the graph, or the model should be checked against `eval
 * Stream the answer back to the client when wired to the frontend.
 * No telemetry beyond LangSmith. Logs must not contain raw credentials.
 * Adding a new dataset = update `config.py` + the schema description in `prompts.py`; don't fork the pipeline.
+
+## Cloud Credentials
+
+- **Provider:** GCP
+- **Billing project:** `msbai-dwd-sk7374`
+- **Service account:** `bq-sql-agent@msbai-dwd-sk7374.iam.gserviceaccount.com`
+- **Roles granted:**
+  - `roles/bigquery.jobUser` on `msbai-dwd-sk7374` — allows running BigQuery jobs billed to this project; no access to any private datasets in the project
+- **Data access:** queries run against `bigquery-public-data.new_york_citibike` (public dataset); the service account cannot read or modify any private data in the billing project
+
+Each team member has their own encrypted key file: `.cloud-credentials.<email>.enc`. The encryption passphrase lives only in the `CLOUD_CREDENTIALS_KEY` environment variable — never in the repo.
+
+Authentication is automatic: the SessionStart hook in `.claude/hooks/cloud-auth.sh` decrypts the credentials and sets `GOOGLE_APPLICATION_CREDENTIALS` at the start of every session.
+
+To add a team member, ask the agent to run the **Add Team Member** cloud-bootstrap flow. To escalate permissions, ask the agent to run the **Permission Escalation** flow.

@@ -1,9 +1,23 @@
-from langchain_anthropic import ChatAnthropic
-from langchain_core.messages import HumanMessage, SystemMessage
+from google.oauth2 import service_account
+from google import genai
+from google.genai import types
 
 from app.state import AgentState
-from app.config import MODEL
+from app.config import MODEL, VERTEX_LOCATION, BQ_BILLING_PROJECT
 from app.prompts import DRAFT_SYSTEM
+
+_SCOPES = ["https://www.googleapis.com/auth/cloud-platform"]
+
+
+def _get_client() -> genai.Client:
+    import os
+    key_file = os.environ.get("GOOGLE_APPLICATION_CREDENTIALS")
+    if key_file:
+        creds = service_account.Credentials.from_service_account_file(key_file, scopes=_SCOPES)
+    else:
+        import google.auth
+        creds, _ = google.auth.default(scopes=_SCOPES)
+    return genai.Client(vertexai=True, project=BQ_BILLING_PROJECT, location=VERTEX_LOCATION, credentials=creds)
 
 
 def draft_node(state: AgentState) -> dict:
@@ -19,14 +33,17 @@ def draft_node(state: AgentState) -> dict:
     if state.get("sql"):
         human_parts.append(f"\nPrevious SQL:\n{state['sql']}")
 
-    llm = ChatAnthropic(model=MODEL, temperature=0)
-    response = llm.invoke([
-        SystemMessage(content=system_content),
-        HumanMessage(content="\n".join(human_parts)),
-    ])
+    client = _get_client()
+    response = client.models.generate_content(
+        model=MODEL,
+        contents="\n".join(human_parts),
+        config=types.GenerateContentConfig(
+            system_instruction=system_content,
+            temperature=0,
+        ),
+    )
 
-    sql = response.content.strip()
-    # Strip markdown fences if the model adds them anyway
+    sql = response.text.strip()
     if sql.startswith("```"):
         lines = sql.split("\n")
         sql = "\n".join(
