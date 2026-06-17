@@ -1,22 +1,30 @@
+# ── Stage 1: build the React frontend ───────────────────────────────────────
+FROM node:20-slim AS frontend-builder
+
+WORKDIR /frontend
+COPY frontend/package.json ./
+RUN npm install
+COPY frontend/ ./
+RUN npm run build
+
+# ── Stage 2: Python backend + bundled frontend ───────────────────────────────
 FROM python:3.11-slim
 
-# Copy uv binary from official image
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
 
 WORKDIR /app
 
-# Install dependencies first (separate layer for cache)
 COPY pyproject.toml uv.lock ./
 RUN uv sync --frozen --no-dev --no-install-project
 
-# Copy application code
 COPY app/ ./app/
 
+# Copy built frontend assets so FastAPI can serve them
+COPY --from=frontend-builder /frontend/dist ./frontend/dist
+
 ENV PYTHONUNBUFFERED=1
-# Make the venv's binaries directly accessible
 ENV PATH="/app/.venv/bin:$PATH"
 
 EXPOSE 8080
 
-# Cloud Run injects $PORT; default to 8080 for local docker run
 CMD ["sh", "-c", "exec uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8080}"]

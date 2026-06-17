@@ -9,6 +9,7 @@ dependencies = [
     "langchain-core>=0.3.0",
     "google-cloud-bigquery>=3.25.0",
     "fastapi>=0.115.0",
+    "aiofiles>=23.0.0",
     "uvicorn[standard]>=0.30.0",
     "sqlglot>=25.0.0",
     "python-dotenv>=1.0.0",
