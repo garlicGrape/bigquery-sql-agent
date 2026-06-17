@@ -71,7 +71,7 @@ gcloud run deploy "${SERVICE_NAME}" \
   --cpu=1 \
   --timeout=120 \
   --set-env-vars="BQ_BILLING_PROJECT=${PROJECT_ID},BQ_PROJECT_ID=bigquery-public-data,BQ_DATASET=new_york_citibike,LANGCHAIN_TRACING_V2=true,LANGCHAIN_PROJECT=bigquery-sql-agent,CORS_ORIGINS=https://sanchitk.dev" \
-  --set-secrets="LANGCHAIN_API_KEY=langchain-api-key:latest" \
+  --set-secrets="LANGCHAIN_API_KEY=langchain-api-key:latest,ANTHROPIC_API_KEY=anthropic-api-key:latest" \
   --quiet
 
 # ── 6. Print service URL ─────────────────────────────────────────────────────
