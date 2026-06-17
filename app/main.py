@@ -28,6 +28,11 @@ class QueryResponse(BaseModel):
     attempts: int
 
 
+@app.get("/")
+async def root():
+    return {"service": "BigQuery SQL Agent", "status": "ok", "endpoints": {"health": "GET /health", "query": "POST /query"}}
+
+
 @app.get("/health")
 async def health():
     return {"status": "ok"}
