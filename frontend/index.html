@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BigQuery SQL Agent</title>
+    <style>
+      body {
+        margin: 48px auto;
+        max-width: 760px;
+        font-family: system-ui, -apple-system, sans-serif;
+        background: #f8fafc;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- In production: set data-api-url to the Cloud Run URL -->
+    <div id="bq-agent-widget" data-api-url="http://localhost:8000"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
