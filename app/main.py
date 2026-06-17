@@ -1,10 +1,21 @@
+import os
+
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from app.graph import graph
 from app.state import AgentState
 
 app = FastAPI(title="BigQuery SQL Agent", version="0.1.0")
+
+_origins = [o.strip() for o in os.getenv("CORS_ORIGINS", "https://sanchitk.dev").split(",")]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=_origins,
+    allow_methods=["GET", "POST"],
+    allow_headers=["Content-Type"],
+)
 
 
 class QueryRequest(BaseModel):
