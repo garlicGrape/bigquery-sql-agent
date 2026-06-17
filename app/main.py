@@ -85,12 +85,20 @@ async def demo():
     <div id="bq-agent-widget"></div>
   </div>
   <script>
-    var origin = window.location.origin;
-    document.getElementById('bq-agent-widget').dataset.apiUrl = origin;
+    window.onerror = function(msg, src, line, col, err) {
+      document.getElementById('status').style.display = 'block';
+      document.getElementById('status').textContent = 'JS Error: ' + msg + ' (' + src + ':' + line + ')';
+    };
+    window.onunhandledrejection = function(e) {
+      document.getElementById('status').style.display = 'block';
+      document.getElementById('status').textContent = 'Promise Error: ' + e.reason;
+    };
+    var el = document.getElementById('bq-agent-widget');
+    el.dataset.apiUrl = window.location.origin;
   </script>
   <script src="/dist/bq-sql-agent.iife.js"
-    onload="document.getElementById('status').style.display='none'"
-    onerror="document.getElementById('status').textContent='Error: could not load widget JS from /dist/bq-sql-agent.iife.js'">
+    onload="document.getElementById('status').style.display='none'; setTimeout(function(){ if(!document.getElementById('bq-agent-widget').children.length){ document.getElementById('status').style.display='block'; document.getElementById('status').textContent='Widget loaded but rendered nothing — check console'; } }, 500);"
+    onerror="document.getElementById('status').textContent='Error: could not load /dist/bq-sql-agent.iife.js (404?)'">
   </script>
 </body>
 </html>"""
