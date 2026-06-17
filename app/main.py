@@ -58,22 +58,13 @@ async def query(req: QueryRequest):
     )
 
 
-# Serve the React frontend — mount after API routes so /health and /query win.
+# Serve the widget JS bundle and any other static dist files.
+# The frontend builds as an IIFE (bq-sql-agent.iife.js), not a full SPA.
 _dist = Path(__file__).parent.parent / "frontend" / "dist"
 if _dist.is_dir():
-    app.mount("/assets", StaticFiles(directory=_dist / "assets"), name="assets")
+    app.mount("/dist", StaticFiles(directory=_dist), name="dist")
 
-    @app.get("/")
-    async def serve_index():
-        return FileResponse(_dist / "index.html")
 
-    @app.get("/{full_path:path}")
-    async def serve_spa(full_path: str):
-        candidate = _dist / full_path
-        if candidate.is_file():
-            return FileResponse(candidate)
-        return FileResponse(_dist / "index.html")
-else:
-    @app.get("/")
-    async def root():
-        return {"service": "BigQuery SQL Agent", "status": "ok"}
+@app.get("/")
+async def root():
+    return {"service": "BigQuery SQL Agent", "status": "ok"}
